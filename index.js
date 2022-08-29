@@ -11,7 +11,13 @@ app.engine('hbs', hbs.engine({
 app.set('view engine', 'hbs');
 
 app.get('/', (req,res) => {
-    res.render('index');
+    res.render('index',{NavActiveCad:true});
+})
+app.get('/users', (req,res) => {
+    res.render('users',{NavActiveUsers:true});
+})
+app.get('/edit', (req,res) => {
+    res.render('edit');
 })
 
 app.listen(PORT,() => {
