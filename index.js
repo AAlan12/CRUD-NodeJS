@@ -10,6 +10,8 @@ app.engine('hbs', hbs.engine({
 }));
 app.set('view engine', 'hbs');
 
+app.use(express.urlencoded({extended: false}));
+
 app.get('/', (req,res) => {
     res.render('index',{NavActiveCad:true});
 })
@@ -18,6 +20,9 @@ app.get('/users', (req,res) => {
 })
 app.get('/edit', (req,res) => {
     res.render('edit');
+})
+app.post('/reg', (req,res) => {
+    res.send(req.body);
 })
 
 app.listen(PORT,() => {
