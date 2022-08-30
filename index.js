@@ -13,6 +13,10 @@ app.set('view engine', 'hbs');
 
 app.use(express.urlencoded({extended: false}));
 
+//import users model
+const User = require('./models/User');
+
+//cong session
 app.use(session({
     secret: 'secret7',
     resave: false,
