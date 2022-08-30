@@ -1,14 +1,16 @@
+{{#unless error}}
 <div class="bg-light p-5 rounded mt-3">
     <h1>Edit</h1>
-    <form>
+    <form action="/update" method="post">
       <div class="row mt-5">
         <div class="col-md-5 mb-3">
           <label for="name" class="form-label">Full name</label>
-          <input type="text" class="form-control" id="name" name="name" placeholder="Type your name">
+          <input type="hidden" value="{{id}}" name="id">
+          <input value="{{name}}" type="text" class="form-control" id="name" name="name" placeholder="Type your name">
         </div>
         <div class="col-md-5 mb-3">
           <label for="email" class="form-label">Email address</label>
-          <input type="email" class="form-control" id="email" name="email" placeholder="Type your e-mail">
+          <input value="{{email}}" type="email" class="form-control" id="email" name="email" placeholder="Type your e-mail">
         </div>
         <div class="col-md-2">
           <button class="mt-3 p-3 w-100 btn btn-warning">Save editions</button>
@@ -16,3 +18,8 @@
       </div>
     </form>
   </div>
+{{else}}
+<div class="card bg-danger text-white">
+      there was a problem: {{problem}}
+</div>
+{{/unless}}

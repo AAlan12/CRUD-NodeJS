@@ -49,8 +49,14 @@ app.get('/users', (req,res) => {
     })
     // 
 })
-app.get('/edit', (req,res) => {
-    res.render('edit');
+app.post('/edit', (req,res) => {
+    let id = req.body.id;
+    User.findByPk(id).then((data) => {
+        return res.render('edit', {error: false, id: data.id, name: data.name, email: data.email})
+    }).catch((err) => {
+        console.log(err);
+        return res.render('edit', {error: true, problem:"can't change registry"});
+    })
 })
 app.post('/reg', (req,res) => {
     let name = req.body.name;
@@ -98,7 +104,54 @@ app.post('/reg', (req,res) => {
         console.log(`There is an error ${err}`);
     })
     
+})
 
+app.post('/update', (req,res) => {
+
+    let name = req.body.name;
+    let email = req.body.email;
+
+    const mistakes = [];
+
+    name = name.trim();
+    email = email.trim();
+
+    name = name.replace(/[^A-zÀ-ú\s]/gi,'');
+    name = name.trim();
+
+    if(name == '' || typeof name == undefined || name == null){
+        mistakes.push({message: "Field cannot be empty"});
+    }
+
+    if(!/^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ\s]+$/.test(name)){
+        mistakes.push({message: "Invalid name"});
+    }
+
+    if(email == '' || typeof email == undefined || email == null){
+        mistakes.push({message: "Field cannot be empty"});
+    }
+
+    if(!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)){
+        mistakes.push({message: "Invalid email"});
+    }
+
+    if(mistakes.length > 0){
+        console.log(mistakes);
+        return res.status(400).send({status: 400, error: mistakes});
+    }
+    User.update({
+        name: name,
+        email: email.toLowerCase()
+    },{
+        where: {
+            id: req.body.id
+        }
+    }).then((result) => {
+        console.log(result);
+        return res.redirect('/users');
+    }).catch((err) => {
+        console.log(err);
+    })
 })
 
 app.listen(PORT,() => {
