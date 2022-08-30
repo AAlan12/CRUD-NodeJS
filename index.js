@@ -38,7 +38,16 @@ app.get('/', (req,res) => {
     res.render('index',{NavActiveCad:true});
 })
 app.get('/users', (req,res) => {
-    res.render('users',{NavActiveUsers:true});
+    User.findAll().then((values) => {
+        if(values.length > 0){
+            res.render('users',{NavActiveUsers:true, table: true, users: values.map(values => values.toJSON())});
+        }else{
+            res.render('users',{NavActiveUsers:true, table: false});
+        }
+    }).catch((err) => {
+        console.log(`There is an error: ${err}`);
+    })
+    // 
 })
 app.get('/edit', (req,res) => {
     res.render('edit');
