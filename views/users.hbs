@@ -1,41 +1,68 @@
 <div class="bg-light p-5 rounded mt-3">
   <h1>List users</h1>
   {{#if table}}
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th scope="col">#ID</th>
-        <th scope="col">Name</th>
-        <th scope="col">E-mail</th>
-        <th scope="col">Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      {{#each users}}
-      <tr>
-        <th scope="row">{{id}}</th>
-        <td>{{name}}</td>
-        <td>{{email}}</td>
-        <td>
-          <div class="row g-1">
-            <div class="col-6 col-md-3">
-              <form action="/edit" method="post">
-                <input type="hidden" name="id" value="{{id}}">
-                <button class="w-100 btn btn-info">Edit</button>
-              </form>              
-            </div>
-            <div class="col-6 col-md-3">
-              <a href="#" class="w-100 btn btn-danger">Delete</a>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">#ID</th>
+          <th scope="col">Name</th>
+          <th scope="col">E-mail</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each users}}
+          <tr>
+            <th scope="row">{{id}}</th>
+            <td>{{name}}</td>
+            <td>{{email}}</td>
+            <td>
+              <div class="row g-1">
+                <div class="col-6 col-md-3">
+                  <form action="/edit" method="post">
+                    <input type="hidden" name="id" value="{{id}}" />
+                    <button class="w-100 btn btn-info">Edit</button>
+                  </form>
+                </div>
+                <div class="col-6 col-md-3">
+                  <button data-bs-toggle="modal" data-bs-target="#deleteModal_{{id}}" class="w-100 btn btn-danger">Delete</button>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <!-- Modal -->
+          <div
+            class="modal fade"
+            id="deleteModal_{{id}}"
+            tabindex="-1"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Confirmation</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal"
+                  aria-label="Close"></button>
+                </div>
+                <div class="modal-body fw-bold text-danger">
+                  Are you sure you want to delete the user {{name}}?
+                </div>
+                <div class="modal-footer">
+                  <form action="/del" method="post">
+                    <input type="hidden" name="id" value="{{id}}">
+                    <button type="submit" class="btn btn-danger">Yes</button>
+                  </form>
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
             </div>
           </div>
-        </td>
-      </tr>
-      {{/each}}
-    </tbody>
-  </table>
+        {{/each}}
+      </tbody>
+    </table>
   {{else}}
-  <div class="card-body">
+    <div class="card-body">
       No data found
-  </div>
+    </div>
   {{/if}}
 </div>

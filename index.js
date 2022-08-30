@@ -59,29 +59,37 @@ app.post('/edit', (req,res) => {
     })
 })
 app.post('/reg', (req,res) => {
+    //VALUES COMING FROM THE FORM
     let name = req.body.name;
     let email = req.body.email;
 
+    //ARRAY THAT WILL CONTAIN THE ERRORS
     const mistakes = [];
 
+    // REMOVE BLANK SPACES BEFORE AND AFTER
     name = name.trim();
     email = email.trim();
 
+    //CLEAR THE NAME OF SPECIAL CHARACTERS (LETTERS ONLY)
     name = name.replace(/[^A-zÀ-ú\s]/gi,'');
     name = name.trim();
 
+    //CHECK IF THE FIELD IS EMPTY OR NOT
     if(name == '' || typeof name == undefined || name == null){
         mistakes.push({message: "Field cannot be empty"});
     }
 
+    //VERIFY IF THE NAME FIELD IS VALID (LETTERS ONLY)
     if(!/^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ\s]+$/.test(name)){
         mistakes.push({message: "Invalid name"});
     }
 
+    //CHECK IF THE FIELD IS EMPTY OR NOT
     if(email == '' || typeof email == undefined || email == null){
         mistakes.push({message: "Field cannot be empty"});
     }
 
+    //VERIFY IF EMAIL IS VALID
     if(!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)){
         mistakes.push({message: "Invalid email"});
     }
@@ -93,6 +101,8 @@ app.post('/reg', (req,res) => {
         return res.redirect('/');
     }
 
+    // SUCCESS NO ERROR
+    //SAVE TO DATABASE
     User.create({
         name: name,
         email: email.toLowerCase()
@@ -148,6 +158,18 @@ app.post('/update', (req,res) => {
         }
     }).then((result) => {
         console.log(result);
+        return res.redirect('/users');
+    }).catch((err) => {
+        console.log(err);
+    })
+})
+
+app.post('/del',(req,res) => {
+    User.destroy({
+        where:{
+            id: req.body.id
+        }
+    }).then((ret) => {
         return res.redirect('/users');
     }).catch((err) => {
         console.log(err);
