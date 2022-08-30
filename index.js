@@ -77,9 +77,18 @@ app.post('/reg', (req,res) => {
         req.session.success = false;
         return res.redirect('/');
     }
-    console.log('Validation performed successfully');
-    req.session.success = true;
-    return res.redirect('/');
+
+    User.create({
+        name: name,
+        email: email.toLowerCase()
+    }).then(() => {
+        console.log('Registered successfully');
+        req.session.success = true;
+        return res.redirect('/');
+    }).catch((err) => {
+        console.log(`There is an error ${err}`);
+    })
+    
 
 })
 
